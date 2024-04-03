@@ -1,18 +1,26 @@
 #include <pybind11/eigen.h>
+#include <pybind11/functional.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 #include "Eigen/Dense"
 
+#include "polyscope/curve_network.h"
 #include "polyscope/polyscope.h"
 #include "polyscope/surface_mesh.h"
-#include "polyscope/curve_network.h"
 
 #include "utils.h"
 
 namespace py = pybind11;
 namespace ps = polyscope;
+
+// Signal handler (makes ctrl-c work, etc)
+// TODO: move that in utils
+void checkSignalsMesh() {
+  if (PyErr_CheckSignals() != 0) throw py::error_already_set();
+}
+void defaultCallbackMesh() { checkSignalsMesh(); }
 
 
 void bind_surface_mesh(py::module& m) {
@@ -41,7 +49,8 @@ void bind_surface_mesh(py::module& m) {
       .def("set_checker_size", &ps::SurfaceCornerParameterizationQuantity::setCheckerSize, "Set checker size")
       .def("set_color_map", &ps::SurfaceCornerParameterizationQuantity::setColorMap, "Set color map")
       .def("set_island_labels", &ps::SurfaceCornerParameterizationQuantity::setIslandLabels<Eigen::VectorXf>)
-      .def("create_curve_network_from_seams", &ps::SurfaceCornerParameterizationQuantity::createCurveNetworkFromSeams, py::return_value_policy::reference);
+      .def("create_curve_network_from_seams", &ps::SurfaceCornerParameterizationQuantity::createCurveNetworkFromSeams,
+           py::return_value_policy::reference);
   py::class_<ps::SurfaceVertexParameterizationQuantity>(m, "SurfaceVertexParameterizationQuantity")
       .def("set_enabled", &ps::SurfaceVertexParameterizationQuantity::setEnabled, "Set enabled")
       .def("set_style", &ps::SurfaceVertexParameterizationQuantity::setStyle, "Set style")
@@ -50,7 +59,8 @@ void bind_surface_mesh(py::module& m) {
       .def("set_checker_size", &ps::SurfaceVertexParameterizationQuantity::setCheckerSize, "Set checker size")
       .def("set_color_map", &ps::SurfaceVertexParameterizationQuantity::setColorMap, "Set color map")
       .def("set_island_labels", &ps::SurfaceVertexParameterizationQuantity::setIslandLabels<Eigen::VectorXf>)
-      .def("create_curve_network_from_seams", &ps::SurfaceVertexParameterizationQuantity::createCurveNetworkFromSeams, py::return_value_policy::reference);
+      .def("create_curve_network_from_seams", &ps::SurfaceVertexParameterizationQuantity::createCurveNetworkFromSeams,
+           py::return_value_policy::reference);
 
   // Vector quantities
   bindVectorQuantity<ps::SurfaceVertexVectorQuantity>(m, "SurfaceVertexVectorQuantity");
@@ -97,7 +107,7 @@ void bind_surface_mesh(py::module& m) {
       .def("set_halfedge_permutation", &ps::SurfaceMesh::setHalfedgePermutation<Eigen::VectorXi>,
            "Set halfedge permutation")
       .def("set_corner_permutation", &ps::SurfaceMesh::setCornerPermutation<Eigen::VectorXi>, "Set corner permutation")
-      
+
       .def("mark_edges_as_used", &ps::SurfaceMesh::markEdgesAsUsed)
       .def("mark_halfedges_as_used", &ps::SurfaceMesh::markHalfedgesAsUsed)
       .def("mark_corners_as_used", &ps::SurfaceMesh::markCornersAsUsed)
@@ -164,7 +174,21 @@ void bind_surface_mesh(py::module& m) {
            "Add a face tangent vector quantity", py::return_value_policy::reference)
       .def("add_one_form_tangent_vector_quantity",
            &ps::SurfaceMesh::addOneFormTangentVectorQuantity<Eigen::VectorXf, Eigen::Matrix<bool, Eigen::Dynamic, 1>>,
-           "Add a one form tangent vector quantity", py::return_value_policy::reference);
+           "Add a one form tangent vector quantity", py::return_value_policy::reference)
+      // Custom Callbacks
+      .def("set_pick_callback", [](ps::SurfaceMesh& s, const std::function<void(int)>& func) {
+        // Create a wrapper which checks signals before calling the passed fuction
+        // Captures by value, because otherwise func seems to become invalid. This is probably happening
+        // on the Python side, and could be fixed with some Pybind11 keep_alive-s or something, but in
+        // lieu of figuring that out capture by value seems fine.
+        // See also the atexit() cleanup registered above, which is used to ensure any bound functions get deleted and
+        // we can exit cleanly.
+        auto wrapperFunc = [=](int id) {
+          checkSignalsMesh();
+          func(id);
+        };
+        s.setUserPickCallback(wrapperFunc);
+      });
 
 
   // Static adders and getters
