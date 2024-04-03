@@ -255,12 +255,20 @@ def set_user_callback(func):
 def clear_user_callback():
     psb.clear_user_callback()
 
+### Drop Callback
+def set_drop_callback(func):
+    psb.set_drop_callback(func)
+
+
 ### Pick
 def have_selection():
     return psb.have_selection()
 
 def get_selection():
     return psb.get_selection()
+
+def reset_selection():
+    return psb.reset_selection()
 
 def set_selection(name, index):
     psb.set_selection(name, index)

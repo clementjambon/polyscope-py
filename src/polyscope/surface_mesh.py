@@ -1,3 +1,5 @@
+from enum import IntEnum
+
 import polyscope_bindings as psb
 import numpy as np
 
@@ -6,6 +8,12 @@ from polyscope.core import str_to_datatype, str_to_vectortype, str_to_param_coor
                            str_to_image_origin, glm3
 from polyscope.structure import Structure
 from polyscope.common import process_quantity_args, process_scalar_args, process_color_args, process_vector_args, process_parameterization_args, check_all_args_processed, check_is_scalar_image, check_is_image3
+
+class SurfacePickType(IntEnum):
+    VERTEX = 0
+    FACE = 1
+    EDGE = 2
+    HALFEDGE = 3
 
 class SurfaceMesh(Structure):
 
@@ -159,8 +167,6 @@ class SurfaceMesh(Structure):
         if edge_perm is not None: self.set_edge_permutation(edge_perm, edge_perm_size)
         if corner_perm is not None: self.set_corner_permutation(corner_perm, corner_perm_size)
         if halfedge_perm is not None: self.set_halfedge_permutation(halfedge_perm, halfedge_perm_size)
-    
-
 
     ## Quantities
 
@@ -355,6 +361,12 @@ class SurfaceMesh(Structure):
         process_quantity_args(self, q, vector_args)
         process_vector_args(self, q, vector_args)
         check_all_args_processed(self, q, vector_args)
+
+    # Custom callback
+    def set_pick_callback(self, func):
+        self.bound_instance.set_pick_callback(func)
+    def set_hover_callback(self, func):
+        self.bound_instance.set_hover_callback(func)
 
 
 
