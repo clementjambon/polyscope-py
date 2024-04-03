@@ -228,6 +228,12 @@ PYBIND11_MODULE(polyscope_bindings, m) {
     py::arg("name"),
     py::arg("index")
   );
+  m.def(
+    "evaluate_pick_query", 
+    [](int xPos, int yPos){ return ps::pick::evaluatePickQuery(xPos, yPos); }, 
+    py::arg("xPos"),
+    py::arg("yPos")
+  );
 
   // === Ground plane and shadows
   m.def("set_ground_plane_mode", [](ps::GroundPlaneMode x) { ps::options::groundPlaneMode = x; });

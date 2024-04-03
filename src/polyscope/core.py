@@ -265,6 +265,9 @@ def get_selection():
 def set_selection(name, index):
     psb.set_selection(name, index)
 
+def evaluate_pick_query(x_pos, y_pos):
+    return psb.evaluate_pick_query(x_pos, y_pos)
+
 ## Ground plane and shadows
 def set_ground_plane_mode(mode_str):
     psb.set_ground_plane_mode(str_to_ground_plane_mode(mode_str))
