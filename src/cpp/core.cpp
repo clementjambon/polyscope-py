@@ -234,6 +234,7 @@ PYBIND11_MODULE(polyscope_bindings, m) {
     py::arg("xPos"),
     py::arg("yPos")
   );
+  m.def("reset_selection", [](){ return ps::pick::resetSelection();});
 
   // === Ground plane and shadows
   m.def("set_ground_plane_mode", [](ps::GroundPlaneMode x) { ps::options::groundPlaneMode = x; });

@@ -262,6 +262,9 @@ def have_selection():
 def get_selection():
     return psb.get_selection()
 
+def reset_selection():
+    return psb.reset_selection()
+
 def set_selection(name, index):
     psb.set_selection(name, index)
 
