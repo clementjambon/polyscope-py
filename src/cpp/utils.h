@@ -144,6 +144,9 @@ py::class_<StructureT> bindStructure(py::module& m, std::string name) {
       .def("add_raw_color_render_image_quantity", &StructureT::template addRawColorRenderImageQuantity<Eigen::VectorXf, Eigen::MatrixXf>, py::arg("name"), py::arg("dimX"), py::arg("dimY"), py::arg("depthData"), py::arg("colorData"), py::arg("imageOrigin")=ps::ImageOrigin::UpperLeft, py::return_value_policy::reference)
       .def("add_raw_color_alpha_render_image_quantity", &StructureT::template addRawColorAlphaRenderImageQuantity<Eigen::VectorXf, Eigen::MatrixXf>, py::arg("name"), py::arg("dimX"), py::arg("dimY"), py::arg("depthData"), py::arg("colorData"), py::arg("imageOrigin")=ps::ImageOrigin::UpperLeft, py::return_value_policy::reference)
 
+      // additional controls
+      .def("enable_transform_gizmo", &StructureT::enableTransformGizmo, "enable transform gizmo", py::arg("enabled") = true)
+
       ;
 
       // managed buffer things
