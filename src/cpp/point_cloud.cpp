@@ -87,6 +87,19 @@ void bind_point_cloud(py::module& m) {
             func(surface_pick_id);
         };
         s.setUserPickCallback(wrapperFunc);
+    })
+    .def("set_hover_callback", [](ps::PointCloud& s, const std::function<void(int)>& func) {
+        // Create a wrapper which checks signals before calling the passed fuction
+        // Captures by value, because otherwise func seems to become invalid. This is probably happening
+        // on the Python side, and could be fixed with some Pybind11 keep_alive-s or something, but in
+        // lieu of figuring that out capture by value seems fine.
+        // See also the atexit() cleanup registered above, which is used to ensure any bound functions get deleted and
+        // we can exit cleanly.
+        auto wrapperFunc = [=](int surface_pick_id) {
+            checkSignalsPc();
+            func(surface_pick_id);
+        };
+        s.setUserHoverCallback(wrapperFunc);
     });
 
   // Static adders and getters
