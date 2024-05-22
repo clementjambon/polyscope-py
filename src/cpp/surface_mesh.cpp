@@ -20,7 +20,6 @@ namespace ps = polyscope;
 void checkSignalsMesh() {
   if (PyErr_CheckSignals() != 0) throw py::error_already_set();
 }
-void defaultCallbackMesh() { checkSignalsMesh(); }
 
 
 void bind_surface_mesh(py::module& m) {
@@ -174,7 +173,7 @@ void bind_surface_mesh(py::module& m) {
            "Add a face tangent vector quantity", py::return_value_policy::reference)
       .def("add_one_form_tangent_vector_quantity",
            &ps::SurfaceMesh::addOneFormTangentVectorQuantity<Eigen::VectorXf, Eigen::Matrix<bool, Eigen::Dynamic, 1>>,
-           "Add a one form tangent vector quantity", py::return_value_policy::reference)
+          "Add a one form tangent vector quantity", py::return_value_policy::reference)
       // Custom Callbacks
       .def("set_pick_callback", [](ps::SurfaceMesh& s, const std::function<void(int, int)>& func) {
         // Create a wrapper which checks signals before calling the passed fuction

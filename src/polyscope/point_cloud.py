@@ -127,6 +127,10 @@ class PointCloud(Structure):
         process_vector_args(self, q, vector_args)
         check_all_args_processed(self, q, vector_args)
 
+    # Custom callback
+    def set_pick_callback(self, func):
+        self.bound_instance.set_pick_callback(func)
+
 
 def register_point_cloud(name, points, enabled=None, radius=None, point_render_mode=None, color=None, material=None, transparency=None):
     """Register a new point cloud"""
