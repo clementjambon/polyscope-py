@@ -165,7 +165,9 @@ void bind_imgui_structs(py::module& m) {
 
       .def_static(
         "HSV", 
-        &ImColor::HSV,        
+        [] (float h, float s, float v, float a){
+            return from_vec4(ImColor::HSV(h, s, v, a).Value);
+        },       
         py::arg("h"),
         py::arg("s"),
         py::arg("v"),
