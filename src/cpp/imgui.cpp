@@ -161,6 +161,19 @@ void bind_imgui_structs(py::module& m) {
       
       ;
 
+    py::class_<ImColor>(m, "ImColor")
+
+      .def_static(
+        "HSV", 
+        &ImColor::HSV,        
+        py::arg("h"),
+        py::arg("s"),
+        py::arg("v"),
+        py::arg("a") = 1.0f
+        )
+      
+      ;
+
 }
 
 void bind_imgui_methods(py::module& m) {

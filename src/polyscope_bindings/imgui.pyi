@@ -1,4 +1,4 @@
-from typing import List, NewType, Optional, Tuple, Union, overload
+from typing import List, NewType, Optional, Tuple, Union, overload, ClassVar
 import numpy as np
 
 # Basic Types
@@ -27,6 +27,10 @@ ImGuiTabItemFlags = NewType("ImGuiTabItemFlags", int)
 ImGuiTreeNodeFlags = NewType("ImGuiTreeNodeFlags", int)
 ImGuiWindowFlags = NewType("ImGuiWindowFlags", int)
 
+class ImColor:
+    @staticmethod
+    def HSV(h: float, s: float, v: float, a: float = 1.0): ...
+    
 # Draw Types
 ImDrawFlags = NewType("ImDrawFlags", int)
 ImDrawListFlags = NewType("ImDrawListFlags", int)
