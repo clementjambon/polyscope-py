@@ -100,7 +100,8 @@ void bind_point_cloud(py::module& m) {
             func(surface_pick_id);
         };
         s.setUserHoverCallback(wrapperFunc);
-    });
+    })
+    .def("pre_kill", &ps::PointCloud::preKill);
 
   // Static adders and getters
   m.def("register_point_cloud", &ps::registerPointCloud<Eigen::MatrixXf>, 
