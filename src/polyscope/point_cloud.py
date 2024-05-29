@@ -132,8 +132,6 @@ class PointCloud(Structure):
         self.bound_instance.set_pick_callback(func)
     def set_hover_callback(self, func):
         self.bound_instance.set_hover_callback(func)
-    def pre_kill(self):
-        self.bound_instance.pre_kill()
 
 
 def register_point_cloud(name, points, enabled=None, radius=None, point_render_mode=None, color=None, material=None, transparency=None):
