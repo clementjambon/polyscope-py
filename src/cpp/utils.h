@@ -146,6 +146,7 @@ py::class_<StructureT> bindStructure(py::module& m, std::string name) {
 
       // additional controls
       .def("enable_transform_gizmo", &StructureT::enableTransformGizmo, "enable transform gizmo", py::arg("enabled") = true)
+      .def("is_enabled_transform_gizmo", &StructureT::isEnabledTransformGizmo, "is transform gizmo enabled?")
 
       ;
 
