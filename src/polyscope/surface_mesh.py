@@ -365,6 +365,8 @@ class SurfaceMesh(Structure):
     # Custom callback
     def set_pick_callback(self, func):
         self.bound_instance.set_pick_callback(func)
+    def set_hover_callback(self, func):
+        self.bound_instance.set_hover_callback(func)
 
 
 
