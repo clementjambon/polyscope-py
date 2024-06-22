@@ -34,6 +34,7 @@ void bind_floating_quantities(py::module& m) {
   auto qColorImage = bindColorQuantity<ps::ColorImageQuantity>(m, "ColorImageQuantity");
   addImageQuantityBindings(qColorImage);
   qColorImage.def("set_is_premultiplied", &ps::ColorImageQuantity::setIsPremultiplied);
+  qColorImage.def("imgui_image", &ps::ColorImageQuantity::imguiImage, py::arg("w"), py::arg("h"));
 
   // global / free-floating adders
   m.def("add_scalar_image_quantity", &ps::addScalarImageQuantity<Eigen::VectorXf>, 
