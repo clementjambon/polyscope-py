@@ -44,7 +44,7 @@ class CMakeBuild(build_ext):
 
         if platform.system() == "Windows":
             cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
-            if not ext.exclude_arch: 
+            if not ext.exclude_arch:
                 if sys.maxsize > 2**32:
                     cmake_args += ['-A', 'x64']
                 else:
@@ -67,7 +67,7 @@ class CMakeBuild(build_ext):
         if(self.distribution.verbose > 0):
             print("Running cmake configure command: " + " ".join(['cmake', ext.sourcedir] + cmake_args))
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
-        
+
         if(self.distribution.verbose > 0):
             print("Running cmake build command: " + " ".join(['cmake', '--build', '.'] + build_args))
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
@@ -78,9 +78,9 @@ def main():
         long_description = f.read()
 
     # Applies to windows only.
-    # Normally, we set cmake's -A option to specify 64 bit platform when need (and /m for build), 
-    # but these are errors with non-visual-studio generators. CMake does not seem to have an idiomatic 
-    # way to disable, so we expose an option here. A more robust solution would auto-detect based on the 
+    # Normally, we set cmake's -A option to specify 64 bit platform when need (and /m for build),
+    # but these are errors with non-visual-studio generators. CMake does not seem to have an idiomatic
+    # way to disable, so we expose an option here. A more robust solution would auto-detect based on the
     # generator.  Really, this option might be better titled "exclude visual-studio-settings-on-windows"
     if "--exclude-arch" in sys.argv:
         exclude_arch = True
@@ -101,7 +101,7 @@ def main():
         package_dir = {'': 'src'},
         packages=setuptools.find_packages(where="src"),
         ext_modules=[CMakeExtension('.', exclude_arch=exclude_arch)],
-        install_requires=["numpy, cupy-cuda11x, cuda-python"],
+        install_requires=["numpy", "cupy-cuda11x", "cuda-python"],
         # setup_requires=['pybind11>=2.4'],
         cmdclass=dict(build_ext=CMakeBuild),
         zip_safe=False,
