@@ -151,7 +151,7 @@ py::class_<StructureT> bindStructure(py::module& m, std::string name) {
       .def("is_enabled_transform_gizmo", &StructureT::isEnabledTransformGizmo, "is transform gizmo enabled?")
       // TODO: clean this, this is too DIY
       .def("set_transform_mode_gizmo", [](StructureT& s, int mode = static_cast<int>(ps::TransformMode::Translation)) {
-            s.setTransformModeGizmo(static_cast<ps::TransformMode>(mode));
+            s.setTransformModeGizmo(mode);
       }, "set transform_mode of gizmo", py::arg("mode") = static_cast<int>(ps::TransformMode::Translation))
 
       ;
