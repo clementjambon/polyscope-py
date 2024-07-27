@@ -101,7 +101,7 @@ def main():
         package_dir = {'': 'src'},
         packages=setuptools.find_packages(where="src"),
         ext_modules=[CMakeExtension('.', exclude_arch=exclude_arch)],
-        install_requires=["numpy", "cupy-cuda11x", "cuda-python"],
+        install_requires=["numpy", "cupy", "cuda-python"],
         # setup_requires=['pybind11>=2.4'],
         cmdclass=dict(build_ext=CMakeBuild),
         zip_safe=False,
